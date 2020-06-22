@@ -6,6 +6,7 @@ import ContactForm from './ContactForm/ContactForm.js';
 import ContactList from './ContactList/ContactList.js';
 import FilterContacts from './FilterContacts/FilterContacts.js';
 
+import getLocalStorage from './getLocalStorage.js';
 export default class App extends Component {
   state = {
     contacts: [],
@@ -13,9 +14,8 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    if (localStorage.getItem('contacts')) {
-      this.setState({ contacts: JSON.parse(localStorage.getItem('contacts')) });
-    }
+    const localStorageValue = getLocalStorage('contacts');
+    this.setState({ contacts: localStorageValue });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -64,8 +64,8 @@ export default class App extends Component {
     return filteredList;
   };
 
-  removeContact = e => {
-    const key = e.target.dataset.key;
+  removeContact = ({ target }) => {
+    const key = target.dataset.key;
     this.setState(prevState => {
       return {
         contacts: prevState.contacts.filter(el => el.id !== key),
